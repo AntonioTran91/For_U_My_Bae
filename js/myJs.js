@@ -97,48 +97,70 @@ $(document).ready(function () {
 
   // show popup
   $("#yes").click(function () {
-    var audio = new Audio("sound/tick.mp3");
-    audio.play();
-    Swal.fire({
-      title: textConfig.text7,
-      // html: true,
-      width: 900,
-      padding: "3em",
-      html: "<input type='text' class='form-control' id='txtReason'  placeholder='Whyyy'>",
-      background: '#fff url("img/iput-bg.jpg")',
-      backdrop: `
-                    rgba(0,0,123,0.4)
-                    url("img/giphy2.gif")
-                    left top
-                    no-repeat
-                  `,
-      showCancelButton: false,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonColor: "#fe8a71",
-      cancelButtonColor: "#f6cd61",
-      confirmButtonText: textConfig.text8,
-    }).then((result) => {
-      if (result.value) {
+  var audio = new Audio("sound/tick.mp3");
+  audio.play();
+
+  Swal.fire({
+    title: textConfig.text7,
+    width: 900,
+    padding: "3em",
+    html: `
+      <input 
+        type="text" 
+        class="form-control" 
+        id="txtReason" 
+        placeholder="Gõ hint của em vào đây..."
+        autocomplete="off"
+      >
+      <small id="charCounter" style="color: white; display: block; margin-top: 10px;">
+        0/${textConfig.text9.length} ký tự
+      </small>
+    `,
+    background: '#fff url("img/iput-bg.jpg")',
+    backdrop: `
+      rgba(0,0,123,0.4)
+      url("img/giphy2.gif")
+      left top
+      no-repeat
+    `,
+    showCancelButton: false,
+    confirmButtonColor: "#fe8a71",
+    confirmButtonText: textConfig.text8,
+
+    onOpen: () => {
+      const input = document.getElementById("txtReason");
+      const counter = document.getElementById("charCounter");
+      const confirmButton = Swal.getConfirmButton();
+
+      confirmButton.disabled = true;
+
+      input.addEventListener("input", function () {
+        const currentLength = input.value.trim().length;
+        const requiredLength = textConfig.text9.length;
+
+        counter.textContent = `${currentLength}/${requiredLength} ký tự`;
+
+        if (currentLength >= requiredLength) {
+          confirmButton.disabled = false;
+          counter.style.color = "#8fffd2";
+        } else {
+          confirmButton.disabled = true;
+          counter.style.color = "white";
+        }
+      });
+    },
+  }).then((result) => {
+    if (result.value) {
       Swal.fire({
         width: 900,
         confirmButtonText: textConfig.text12,
         background: '#fff url("img/iput-bg.jpg")',
         title: textConfig.text10,
         confirmButtonColor: "#83d0c9",
-      }).then( () => {
+      }).then(() => {
         window.location = "./iloveu.html";
       });
-      }
-    });
-
-    $("#txtReason").focus(function () {
-      var handleWriteText = setInterval(function () {
-        textGenerate();
-      }, 10);
-      $("#txtReason").blur(function () {
-        clearInterval(handleWriteText);
-      });
-    });
+    }
   });
+});
 });
