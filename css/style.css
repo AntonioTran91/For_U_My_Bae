@@ -32,8 +32,15 @@
   -webkit-filter: blur(4px);
   filter: blur(4px);
 }
-.swal2-title, .swal2-content{
-  color: azure !important;
+.swal2-title {
+  color: #ff9ecb !important;           /* hồng pastel */
+  text-shadow: 0 0 8px rgba(255, 158, 203, 0.35);
+}
+
+.swal2-content,
+.swal2-html-container {
+  color: #ffd6e7 !important;           /* hồng pastel nhạt hơn */
+  text-shadow: 0 0 6px rgba(255, 214, 231, 0.25);
 }
 .swal2-popup {
   border-radius: 15px !important;
