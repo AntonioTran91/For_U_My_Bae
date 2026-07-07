@@ -81,22 +81,8 @@ $(document).ready(function () {
     if (screen.width >= 900) switchButton();
   });
 
-  // generate text in input
-  function textGenerate() {
-  var text = textConfig.text9;
-  var currentValue = $("#txtReason").val() || "";
-  var nextLength = currentValue.length + 1;
-
-  if (nextLength > text.length) {
-    $("#txtReason").val("");
-    return;
-  }
-
-  $("#txtReason").val(text.slice(0, nextLength));
-}
-
   // show popup
-  $("#yes").click(function () {
+$("#yes").click(function () {
   var audio = new Audio("sound/tick.mp3");
   audio.play();
 
@@ -109,7 +95,7 @@ $(document).ready(function () {
         type="text" 
         class="form-control" 
         id="txtReason" 
-        placeholder="Gõ hint của em vào đây..."
+        placeholder="Gõ gì cũng được nè..."
         autocomplete="off"
       >
       <small id="charCounter" style="color: white; display: block; margin-top: 10px;">
@@ -131,22 +117,31 @@ $(document).ready(function () {
       const input = document.getElementById("txtReason");
       const counter = document.getElementById("charCounter");
       const confirmButton = Swal.getConfirmButton();
+      const targetText = textConfig.text9;
 
       confirmButton.disabled = true;
 
       input.addEventListener("input", function () {
-        const currentLength = input.value.trim().length;
-        const requiredLength = textConfig.text9.length;
+        let currentLength = input.value.length;
 
-        counter.textContent = `${currentLength}/${requiredLength} ký tự`;
+        if (currentLength > targetText.length) {
+          currentLength = targetText.length;
+        }
 
-        if (currentLength >= requiredLength) {
+        input.value = targetText.slice(0, currentLength);
+
+        counter.textContent = `${currentLength}/${targetText.length} ký tự`;
+
+        if (currentLength >= targetText.length) {
           confirmButton.disabled = false;
           counter.style.color = "#8fffd2";
         } else {
           confirmButton.disabled = true;
           counter.style.color = "white";
         }
+
+        // Đưa con trỏ về cuối input
+        input.setSelectionRange(input.value.length, input.value.length);
       });
     },
   }).then((result) => {
